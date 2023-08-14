@@ -1,0 +1,17 @@
+#img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step6\basis6.png', cv2.IMREAD_GRAYSCALE)
+
+import cv2
+import numpy as np
+
+# Bild laden
+img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step2\basis2.png', cv2.IMREAD_GRAYSCALE)
+
+# Median-Filter anwenden
+filtered_img = cv2.medianBlur(img, 3)  # Hier 5 ist die Größe des Filterkernels
+
+# Bilder anzeigen
+cv2.imshow('Originale Image', img)
+cv2.imshow('Filtered Image', filtered_img)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()

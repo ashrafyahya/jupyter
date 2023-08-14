@@ -1,0 +1,25 @@
+import numpy as np
+import cv2
+
+#load a video or use a webCamera
+cap = cv2.VideoCapture(r'C:\Users\i-asya\Desktop\test1.mp4')
+
+while True:
+    ret, frame = cap.read()
+    width = int(cap.get(3))# 3 means width
+    height = int(cap.get(4))# 4 means height
+    
+    image= np.zeros(frame.shape, np.uint8)# make a black image
+    smaller_frame= cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
+    #create 4 frames
+    image[:height//2, :width//2]= cv2.rotate(smaller_frame,cv2.ROTATE_180)#rotate the frame
+    image[height//2:, :width//2]= smaller_frame
+    image[:height//2, width//2:]= cv2.rotate(smaller_frame,cv2.ROTATE_180)
+    image[height//2:, width//2:]= smaller_frame
+    
+    cv2.imshow('frame', image) #show the video
+    
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()

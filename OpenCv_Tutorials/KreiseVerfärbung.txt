@@ -1,0 +1,45 @@
+
+#img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step6\basis6.png', cv2.IMREAD_GRAYSCALE)
+
+import cv2
+import numpy as np
+
+# Bild laden (als Graustufenbild)
+img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step6\basis6.png', cv2.IMREAD_GRAYSCALE)
+
+# Schwellenwert setzen (zum Beispiel 127)
+threshold_value = 127
+
+# Anwenden des Schwellenwertverfahrens
+ret, thresholded = cv2.threshold(img, threshold_value, 255, cv2.THRESH_BINARY)
+
+# Definieren des Kernels für den Minimale-Filter
+kernel_size = 3  # Größe des Kernels
+kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+# Anwenden des Minimale-Filters
+min_filtered = cv2.erode(thresholded, kernel, iterations=2)
+
+inverted = cv2.bitwise_not(min_filtered)
+
+# Anzahl der gefundenen Kreise
+num_circles, _ = cv2.findContours(inverted, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# Farbpalette mit verschiedenen Farben
+color_palette = [(255, 0, 0), (0, 255, 0), (0, 0, 255),(255,0,255),(255,255,0),(0,255,255)]
+
+# Bild in Farbbild umwandeln
+colored = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+
+# Schleife über die Kreise und Zuweisung von Farben
+for i, contour in enumerate(num_circles):
+    color = color_palette[i % len(color_palette)]
+    cv2.drawContours(colored, [contour], -1, color, -1)  # Kreis mit der ausgewählten Farbe zeichnen
+
+# Anzeigen des Originalbilds und des gefärbten Bilds
+cv2.imshow('Originalbild', img)
+cv2.imshow('Beliebig gefärbtes Bild', colored)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+

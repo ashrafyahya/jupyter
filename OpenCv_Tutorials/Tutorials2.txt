@@ -1,0 +1,61 @@
+# Image path
+#image_path = r'C:\Users\i-asya\Desktop\Bild1.png'
+
+import cv2
+import os
+#Bild lesen
+img =cv2.imread(r'C:\Users\i-asya\Desktop\Bild1.png',-1)
+
+#Bildgröße ändern
+img= cv2.resize(img, (0,0), fx=0.5, fy=0.5)
+
+#Bild umdrehen
+img= cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+
+os.chdir(r'C:\Users\i-asya\Desktop')
+#Bild speichern
+cv2.imwrite('new_image.jpg', img)
+
+#Bild anzeigen
+cv2.imshow('Image', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+------------------------------------------------------
+import cv2
+import random
+#Bild lesen
+img =cv2.imread(r'C:\Users\i-asya\Desktop\Bild1.png',-1)
+
+#print(img[257][400])
+
+#Bildfarbe ändern
+for i in range(100):
+    for j in range(img.shape[1]):
+        img[i][j]=[random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]
+
+cv2.imshow('Image', img)
+
+cv2.waitKey(0)
+cv2.destroyAllWindos()
+------------------------------------------------------
+# Image path
+#image_path = r'C:\Users\i-asya\Desktop\Bild1.png'
+
+import cv2
+#Bild lesen
+img =cv2.imread(r'C:\Users\i-asya\Desktop\Bild1.png',-1)
+  
+#Ausgabe von Zeilen- und Spaltenanzahl
+print(img.shape)  
+
+# Bildteil kopieren
+tag = img[475:675, 582:882]
+
+# Zielbereich anpassen
+img[100:300, 450:750] = tag
+
+cv2.imshow('Image', img)
+
+cv2.waitKey(0)
+cv2.destroyAllWindos()
+------------------------------------------------------

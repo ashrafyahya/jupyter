@@ -1,0 +1,80 @@
+import cv2
+img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step2\Basis2.png', 0)
+
+def Median_filter(img,kernel_size ):
+    height, width= img.shape
+    output_img= img.copy()
+    step= kernel_size//2
+    in_size= kernel_size * kernel_size
+    #kernel-array
+    kernel=[1 for _ in range(in_size)]
+    median_wert= kernel[0]
+    
+    #Erstens: Bild durchgehen
+    for y in range(step, height- step):
+        for x in range(step, width- step): 
+                
+            n=0
+            for ky in range(y-step, y+step+1):
+                for kx in range(x-step, x+step+1):
+                    #kernel ausfüllen
+                    kernel[n]=img[ky][kx]
+                    n+=1       
+            #statt sort() folgt..
+            for k in range(in_size):
+                for m in range(in_size):
+                    if kernel[m] > kernel[k]:
+                        kernel[m], kernel[k]= kernel[k], kernel[m]
+            median_wert= kernel[in_size//2]
+            output_img[y][x]= median_wert      
+            
+    return output_img
+
+kernel_size= 11
+filtered_img= Median_filter(img, kernel_size)
+cv2.imshow('Original Image', img)
+cv2.imshow('Median-filtered Image',filtered_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+-------------------------------------------------------------------
+#Modifizierte Lösung
+import cv2
+img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step2\Basis2.png', 0)
+
+def Median_filter(img, kernel_size ):
+    height, width= img.shape
+    output_img= img.copy()
+    step= kernel_size//2
+    in_size= kernel_size * kernel_size
+    #kernel-array
+    kernel=[[1] * width for _ in range(in_size)]
+    neue_kernel=[1 for _ in range(in_size)]
+    median_wert= kernel[0]
+    
+    #Erstens: Bild durchgehen
+    for y in range(step, height- step):
+        for x in range(step, width- step): 
+            n=0
+            s=0
+            for ky in range(y-step, y+step+1):
+                for kx in range(x-step, x+step+1):
+                    #kernel ausfüllen
+                    neue_kernel[n]=img[ky][kx]*kernel[s][n]
+                    n+=1  
+                s+=1
+            #statt sort() folgt..
+            for k in range(in_size):
+                for m in range(in_size):
+                    if neue_kernel[m] > neue_kernel[k]:
+                        neue_kernel[m], neue_kernel[k]= neue_kernel[k], neue_kernel[m]
+            median_wert= neue_kernel[in_size//2]
+            output_img[y][x]= median_wert      
+            
+    return output_img
+
+kernel_size= 3
+filtered_img= Median_filter(img, kernel_size)
+cv2.imshow('Original Image', img)
+cv2.imshow('Median-filtered Image',filtered_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

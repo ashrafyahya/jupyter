@@ -1,0 +1,38 @@
+import cv2
+
+img = cv2.imread(r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step4\Basis4.png', 0)
+
+def max_filter(img):
+    height, width = img.shape
+    output_img= img.copy()
+    step=1
+    
+    #Geht das Bild durch
+    for y in range(step, height- step - 1):
+        for x in range(step, width - step -1):
+            
+            #Matrix für Max-Filter
+            max_matrix=[[0]*3 for _ in range(3)]
+            max_wert=max_matrix[0][0]
+            for ky in range(y-step, y+step):
+                for kx in range(x-step, x+step):
+                    
+                    #For-Schleife zum Esetzen von append()
+                    for i in range(3):
+                        for k in range(3):
+                            max_matrix[i][k]=img[ky][kx]
+                            
+                    #For-Schleife zum Ersetzen von max()        
+                    for j in range(3):
+                        for n in range(3):
+                            if max_wert < max_matrix[i][n]:
+                                max_wert = max_matrix[i][n]
+
+            output_img[y][x]=max_wert
+    return output_img
+
+
+cv2.imshow('Original Image', img)
+cv2.imshow('Max-filtered Image', max_filter(img))
+cv2.waitKey(0)
+cv2.destroyAllWindows()

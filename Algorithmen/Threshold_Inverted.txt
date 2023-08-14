@@ -1,0 +1,34 @@
+def threshold_image(input_img, threshold_value):
+    height = len(input_img)
+    width = len(input_img[0])
+    output_img = [[0] * width for _ in range(height)]
+    
+    for y in range(height):
+        for x in range(width):
+            if input_img[y][x] >= threshold_value:
+                output_img[y][x] = 255  # Pixelwert auf 255 setzen (weiß)
+            else:
+                output_img[y][x] = 0    # Pixelwert auf 0 setzen (schwarz)
+    
+    inverted_img = [[0] * width for _ in range(height)]
+    for y in range(height):
+        for x in range(width):
+            inverted_img[y][x] = 255 - output_img[y][x]
+    
+    return inverted_img
+
+# Beispielbild (Graustufen)
+input_img = [[100, 200, 50, 150],
+             [75, 180, 120, 210],
+             [90, 160, 70, 190],
+             [130, 220, 40, 170]]
+
+threshold_value = 150
+thresholded_img = threshold_image(input_img, threshold_value)
+
+print("Input Image:")
+for row in input_img:
+    print(row)
+print("Thresholded Image:")
+for row in thresholded_img:
+    print(row)

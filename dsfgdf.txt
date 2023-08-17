@@ -1,0 +1,90 @@
+import cv2
+
+img = cv2.imread(
+  r'C:\Users\i-asya\Desktop\Software\BV-Tutorial\Step6\Basis6.png', 1)
+colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 0, 255), (255, 255, 0), (0, 255, 255)]
+
+def Threshold(img, threshold_value):
+    height, width, depth = img.shape
+    output_img = img.copy()
+
+    for y in range(height):
+        for x in range(width):
+            for d in range(depth):
+                if img[y][x][d] >= threshold_value:
+                    output_img[y][x][d] = 0  
+                else:
+                    output_img[y][x][d] = 255
+    return output_img
+
+def colored_pic(img, kernel_size):
+  
+  objekt = 0
+  height, width, depth = img.shape
+  output_img = img.copy()
+  step = kernel_size // 2
+  in_size = kernel_size * kernel_size
+  #kernel-array
+  kernel = [[1] * width for _ in range(in_size)]
+  neue_kernel = [1 for _ in range(in_size)]
+  median_wert = kernel[0]
+  farbe = neue_kernel[0]
+
+  #Erstens: Bild durchgehen
+  for y in range(step, height - step):
+    for x in range(step, width - step):
+      n = 0
+      s = 0
+      for ky in range(y - step, y + step + 1):
+        for kx in range(x - step, x + step + 1):
+          #kernel ausfüllen
+          neue_kernel[n] = img[ky][kx] * kernel[s][n]
+          n += 1
+        s += 1
+      median_wert = neue_kernel[in_size // 2]
+      #----------------------------------------
+      color=0
+      check_bunt=False
+      #wenn besondere Farbe vorhanden, dann zuweisen
+      for i in range(in_size):            
+          if sum(neue_kernel[i]) != 0 and sum(neue_kernel[i]) != 255*3 :
+              print("color")
+              cv2.waitKey(0)
+              check_bunt=True
+              color = sum(neue_kernel[i])
+              break
+          
+      #Case3: Mittelpunkt ist weiß und besondere Farbe vorhanden
+      if sum(median_wert) == 255*3 and check_bunt == True:
+         farbe = color
+         output_img[y][x] = farbe
+         check_bunt=False
+         
+      #Case2: Mittelpunkt ist weiß
+      elif sum(median_wert) == 255*3 and check_bunt == False:
+         farbe = colors[objekt]
+         output_img[y][x] = farbe
+         
+      # Case1: Hintergrund
+      elif sum(median_wert) == 0 and check_bunt == False:
+              output_img[y][x]= 0
+              
+      if sum(img[y][x]) == 255 * 3 and sum(img[y][x+1]) == 0 :
+          objekt +=1
+          if objekt>5:
+              objekt=0
+      
+      #output_img[y][x] = farbe
+
+  return output_img
+
+kernel_size = 3
+threshold_value = 230
+thresholded_img = Threshold(img, threshold_value)
+colored_img = colored_pic(thresholded_img, kernel_size)
+
+#cv2.imshow('Original Image', img)
+#cv2.imshow('Thresholded Image', thresholded_img)
+#cv2.imshow('Colored Image', colored_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
